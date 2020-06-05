@@ -1,1 +1,1 @@
-{"name":"Your Project Name","uuid":"%uuid%","mainClass":"org.burgerbude.labymod.addons.example.ExampleAddon"}
+{"name":"PingTag","uuid":"%uuid%","mainClass":"org.burgerbude.labymod.addons.pingtag.PingTagAddon"}
