@@ -5,10 +5,9 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.entity.projectile.EntityEvokerFangs;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * This object represents a detector that detects the pings of all online players after some time
@@ -18,9 +17,9 @@ import java.util.UUID;
 public class PingDetector {
 
     private final Minecraft minecraft;
+    private final Map<UUID, Integer> pings;
 
     private long lastUpdate;
-    private Map<UUID, Integer> pings;
 
     /**
      * Default constructor
@@ -36,20 +35,13 @@ public class PingDetector {
      * Update the pings
      */
     public void updatePing() {
+        if (this.lastUpdate + 2_500L >= System.currentTimeMillis()) return;
         if (this.minecraft.player == null || this.minecraft.getConnection() == null) return;
+        this.lastUpdate = System.currentTimeMillis();
 
-        for (Map.Entry<Class<? extends Entity>, Render<? extends Entity>> entry :
-                this.minecraft.getRenderManager().entityRenderMap.entrySet()) {
-            if (entry.getKey().equals(EntityArmorStand.class)) return;
-        }
-
-
-        // Every 5 seconds the ping is detected by the players.
-        if (this.lastUpdate + 5000L <= System.currentTimeMillis()) {
-            this.lastUpdate = System.currentTimeMillis();
-
-
+        try {
             for (NetworkPlayerInfo networkPlayerInfo : this.minecraft.getConnection().getPlayerInfoMap()) {
+
                 if (networkPlayerInfo.getGameProfile().getId().getLeastSignificantBits() == 0L) return;
 
                 NetworkPlayerInfo playerInfo = this.networkPlayerInfo(networkPlayerInfo.getGameProfile().getName());
@@ -58,8 +50,8 @@ public class PingDetector {
 
                 this.pings.put(networkPlayerInfo.getGameProfile().getId(), playerInfo.getResponseTime());
             }
+        } catch (ConcurrentModificationException ignored) {
         }
-
     }
 
     /**

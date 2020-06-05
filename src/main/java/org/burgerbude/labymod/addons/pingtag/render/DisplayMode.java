@@ -7,9 +7,22 @@ package org.burgerbude.labymod.addons.pingtag.render;
  */
 public enum DisplayMode {
 
-    ABOVE_HEAD,
-    LINE,
-    BESIDE_LEFT_BODY,
-    BESIDE_RIGHT_BODY
+    ABOVE_HEAD_TEXT("Text above head"),
+    ABOVE_HEAD_TEXTURE("Icon above head"),
+    ABOVE_HEAD_TEXT_TEXTURE("Icon with Text above head");
 
+    private final String displayName;
+
+    DisplayMode(String displayName) {
+        this.displayName = displayName;
+    }
+
+    /**
+     * Gets the display name of a display mode
+     *
+     * @return a translated display name or the fallback
+     */
+    public String displayName() {
+        return displayName;
+    }
 }
