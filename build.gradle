@@ -4,7 +4,7 @@ buildscript {
         jcenter()
         maven {
             name "burgerbude-repo"
-            url "http://repo.burgerbude.org/"
+            url "http://burgerbude.org/repository/"
         }
         maven {
             name "forge-repo"
